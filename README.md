@@ -35,14 +35,6 @@ Breast Cancer Wisconsin Dataset (from sklearn)
 - Artifact management
 - Model versioning
 
-## How to Run
-
-```bash
-pip install -r requirements.txt
-mlflow ui
-cd src
-python train.py
-
 ## MLflow UI
 
 Below are screenshots from the MLflow UI showing experiment tracking and model comparison.
@@ -61,3 +53,12 @@ Planned enhancements for this project:
 - Add monitoring and alerting
 
 These enhancements will evolve this repository into a **production-grade MLOps system**.
+
+
+## How to Run
+
+```bash
+pip install -r requirements.txt
+mlflow ui
+cd src
+python train.py
