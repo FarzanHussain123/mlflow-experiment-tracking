@@ -1,5 +1,6 @@
 import mlflow
 import mlflow.sklearn
+import mlflow.data
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
@@ -10,8 +11,17 @@ from utils import plot_confusion_matrix
 
 # Load dataset
 data = load_breast_cancer()
-X = data.data
-y = data.target
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = pd.Series(data.target, name="target")
+
+df = pd.concat([X, y], axis=1)
+
+# Log dataset to MLflow
+dataset = mlflow.data.from_pandas(
+    df,
+    source="sklearn.datasets.load_breast_cancer",
+    name="Breast_Cancer_Dataset"
+)
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -27,6 +37,8 @@ mlflow.set_experiment("Cancer_Classification_MLflow_Demo")
 
 for model_name, model in models.items():
     with mlflow.start_run(run_name=model_name):
+
+        mlflow.log_input(dataset, context="training")
 
         model.fit(X_train, y_train)
         predictions = model.predict(X_test)
